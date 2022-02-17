@@ -5,6 +5,8 @@ const client = require('./client');
 
 module.exports ={
     ...require('./users'),
-    ...require('./activities')
+    ...require('./activities'),
+    ...require('./routines'),
+    ...require('./routine_activities')
 }
 

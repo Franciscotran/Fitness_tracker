@@ -8,7 +8,7 @@ const createUser = async({username,password})=>{
         INSERT INTO users(username, password)
         VALUES ($1, $2)
         ON CONFLICT (username) DO NOTHING
-        returning *;
+        RETURNING *;
         `, [username, password]);
         return users;
     }catch(error){
