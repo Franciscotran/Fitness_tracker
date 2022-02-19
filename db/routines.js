@@ -31,4 +31,8 @@ const getRoutinesWithoutActivities = async()=>{
 }
 
 
+
+
+
+
 module.exports ={ createRoutine, getRoutinesWithoutActivities}

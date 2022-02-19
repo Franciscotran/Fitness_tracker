@@ -15,6 +15,49 @@ const createActivity = async({name,description})=>{
     }
 }
 
+const  getActivityById = async (id)=>{
+
+    try{
+        const {rows: [activity]} = await client.query(`
+        SELECT * FROM activities
+        WHERE id = $1
+        `, [id]);
+        
+      return activity;
+    }catch(error){
+        throw error;
+    }
+}
+
+
+const updateActivity = async (activitytId, fields = {}) =>{
+
+    const { activities } = fields; 
+    delete fields.activities;
+  
+    
+    const setString = Object.keys(fields).map(
+      (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+
+
+    try{
+        const {rows: [activity]} = await client.query(`
+        UPDATE activities
+        SET $1
+        WHERE id = $2
+        RETURNING *;
+        `, [setString, activitytId]);
+
+        if (tags === undefined) {
+            return await getPostById(postId);
+          }
+        return activity;
+    }catch(error){
+        throw error;
+    }
+}
+
 
 const getAllActivities = async()=>{
 
@@ -29,4 +72,4 @@ const getAllActivities = async()=>{
 }
 
 
-module.exports ={ createActivity, getAllActivities}
+module.exports ={ createActivity, getAllActivities, updateActivity,getActivityById}
