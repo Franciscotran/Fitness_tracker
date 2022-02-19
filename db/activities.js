@@ -19,7 +19,8 @@ const  getActivityById = async (id)=>{
 
     try{
         const {rows: [activity]} = await client.query(`
-        SELECT * FROM activities
+        SELECT * 
+        FROM activities
         WHERE id = $1
         `, [id]);
         
@@ -30,34 +31,25 @@ const  getActivityById = async (id)=>{
 }
 
 
-const updateActivity = async (activitytId, fields = {}) =>{
-
-    const { activities } = fields; 
-    delete fields.activities;
-  
-    
-    const setString = Object.keys(fields).map(
-      (key, index) => `"${ key }"=$${ index + 1 }`
-    ).join(', ');
-
-
+const updateActivity = async ({id, name, description}) =>{
+     
     try{
         const {rows: [activity]} = await client.query(`
         UPDATE activities
-        SET $1
-        WHERE id = $2
+        SET name =$1, description=$2
+        WHERE id = $3
         RETURNING *;
-        `, [setString, activitytId]);
+        `, [name, description, id]);
 
-        if (tags === undefined) {
-            return await getPostById(postId);
-          }
+        if(!activity){
+            return;
+        }
+
         return activity;
     }catch(error){
         throw error;
     }
 }
-
 
 const getAllActivities = async()=>{
 
