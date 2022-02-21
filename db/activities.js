@@ -93,4 +93,8 @@ async function attachActivitiesToRoutines(routines) {
   }
 
 
-module.exports ={ createActivity, getAllActivities, updateActivity,getActivityById, attachActivitiesToRoutines}
+module.exports ={ createActivity, 
+    getAllActivities, 
+    updateActivity,getActivityById, 
+    attachActivitiesToRoutines
+}
