@@ -43,8 +43,25 @@ const getRoutineActivitiesByRoutine = async({id}) =>{
     }
 }
 
+const updateRoutineActivity  = async({id, isPublic, name, goal})=>{
+    
+    try{
+        const {rows: [routine]} = await client.query(`
+            UPDATE routines
+            SET "isPublic" = $1, name =$2, goal=$3
+            WHERE id = $4
+            RETURNING *;
+        `,[isPublic, name, goal, id] );
+
+        return routine;
+    }catch(error){
+        throw error;
+    }
+}
+
 
 module.exports ={ addActivityToRoutine,
     destroyRoutineActivity,
-    getRoutineActivitiesByRoutine
+    getRoutineActivitiesByRoutine,
+    updateRoutineActivity 
 }

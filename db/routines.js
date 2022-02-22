@@ -115,14 +115,16 @@ const  getPublicRoutinesByActivity = async ()=>{
     }
 }
 
-const updateRoutine = async({id})=>{
-
+const updateRoutine = async({id, isPublic, name, goal})=>{
+    
     try{
         const {rows: [routine]} = await client.query(`
             UPDATE routines
-            WHERE id = $1
+            SET "isPublic" = $1, name =$2, goal=$3
+            WHERE id = $4
             RETURNING *;
-        `,[duration, count, id] );
+        `,[isPublic, name, goal, id] );
+
         return routine;
     }catch(error){
         throw error;
@@ -135,8 +137,16 @@ const destroyRoutine = async({id}) =>{
             DELETE FROM routines
             WHERE id = $1
             RETURNING *;
+        `, [id]);
+
+        await client.query(`
+            DELETE FROM routine_activities
+            WHERE "routineId" = $1
+            RETURNING *;
         `, [id])
-        return routine;
+
+        return !routine;
+
     }catch(error){
         throw error;
     }
