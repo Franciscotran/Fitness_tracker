@@ -56,7 +56,7 @@ async function getAllRoutines() {
     } catch (error) {
       throw error
     }
-  }
+}
 
 const getAllPublicRoutines = async()=>{
 
@@ -116,19 +116,28 @@ const  getPublicRoutinesByActivity = async ()=>{
     }
 }
 
-const updateRoutine = async({id, isPublic, name, goal})=>{
-    
-    try{
-        const {rows: [routine]} = await client.query(`
-            UPDATE routines
-            SET "isPublic" = $1, name =$2, goal=$3
-            WHERE id = $4
-            RETURNING *;
-        `,[isPublic, name, goal, id] );
-
-        return routine;
-    }catch(error){
-        throw error;
+const updateRoutine = async ({ id, ...fields }) => {
+   
+    const setString = Object.keys(fields).map(
+      (key, index) => `"${key}" = $${index + 1}`
+    ).join(', ');
+  
+    if (setString.length === 0) {
+      return;
+    }
+    const valuesArray = [...Object.values(fields), id];
+  
+    try {
+      const { rows: [updatedRoutine] } = await client.query(`
+        UPDATE routines
+        SET ${setString}
+        WHERE id = $${valuesArray.length}
+        RETURNING *;
+      `, valuesArray)
+  
+      return updatedRoutine;
+    } catch (err) {
+      throw err;
     }
 }
 

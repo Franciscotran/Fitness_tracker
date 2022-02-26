@@ -75,4 +75,4 @@ const getUser = async({username, password})=>{
 }
 
 
-module.exports ={ createUser, getUser, getUserById}
+module.exports ={ createUser, getUser, getUserById,getUserByUsername}
