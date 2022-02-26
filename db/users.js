@@ -41,7 +41,7 @@ const getUserByUsername = async (username)=>{
 const getUserById = async (id)=>{
 
     try{
-        const {rows: {user}} = await client.query(`
+        const {rows: [user]} = await client.query(`
         SELECT * FROM users
         WHERE id = $1
         `, [id]);
@@ -75,4 +75,4 @@ const getUser = async({username, password})=>{
 }
 
 
-module.exports ={ createUser, getUser, getUserById}
+module.exports ={ createUser, getUser, getUserById,getUserByUsername}
