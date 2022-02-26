@@ -49,7 +49,8 @@ async function getAllRoutines() {
       const { rows: routines } = await client.query(`
       SELECT routines.*, users.username AS "creatorName"
       FROM routines
-      JOIN users ON routines."creatorId" = users.id 
+      JOIN users 
+      ON routines."creatorId" = users.id 
       `);
       return attachActivitiesToRoutines(routines);
     } catch (error) {
@@ -133,19 +134,19 @@ const updateRoutine = async({id, isPublic, name, goal})=>{
 
 const destroyRoutine = async({id}) =>{
     try{
-        const {rows: [routine]} = await client.query(`
-            DELETE FROM routines
+        await client.query(`
+            DELETE 
+            FROM routines
             WHERE id = $1
             RETURNING *;
         `, [id]);
 
         await client.query(`
-            DELETE FROM routine_activities
+            DELETE 
+            FROM routine_activities
             WHERE "routineId" = $1
             RETURNING *;
         `, [id])
-
-        return !routine;
 
     }catch(error){
         throw error;
