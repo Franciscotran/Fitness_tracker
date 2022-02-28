@@ -37,20 +37,18 @@ activitiesRouter.post('/', requireUser, async (req, res, next) => {
     }
   })
 
-
   activitiesRouter.patch('/:activityId', requireUser, async (req, res, next) => {
     const { activityId: id } = req.params;
-    const {name, description} = req.body
+    const activityBody = { id, ...req.body };
   
     try {
-      const updatedActivity = await updateActivity(id, name, description);
+      const updatedActivity = await updateActivity(activityBody);
   
       res.send(updatedActivity)
     } catch ({ name, message }) {
       next({ name, message });
     }
-  })
-
+  });
 
 
 activitiesRouter.get('/:activityId/routines', async (req, res, next) => {
