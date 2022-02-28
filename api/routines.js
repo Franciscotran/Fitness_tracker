@@ -66,7 +66,7 @@ const { requireUser } = require('./utils')
       if (!routine)
         next({
           name: `RoutineByIdError`,
-          message: `id provided does not match with any existent routine`,
+          message: `id provided does not match with any existing routine`,
         })
   
       if (routine.creatorId === req.user.id) {
